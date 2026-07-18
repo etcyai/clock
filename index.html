@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>時鐘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+  }
+
+  .time {
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(60px, 15vw, 220px);
+    font-weight: 700;
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .date-line {
+    margin-top: clamp(16px, 4vw, 36px);
+    color: #fff;
+    opacity: 0.55;
+    font-size: clamp(11px, 2vw, 16px);
+    letter-spacing: 2px;
+    font-weight: 300;
+  }
+</style>
+</head>
+<body>
+
+  <div class="time" id="timeEl">00:00</div>
+  <div class="date-line" id="dateLine"></div>
+
+  <script>
+    const timeEl = document.getElementById('timeEl');
+    const dateLineEl = document.getElementById('dateLine');
+
+    function update() {
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      timeEl.textContent = `${h}:${m}`;
+
+      const y = now.getFullYear();
+      const mo = (now.getMonth() + 1).toString().padStart(2, '0');
+      const d = now.getDate().toString().padStart(2, '0');
+      dateLineEl.textContent = `${y} / ${mo} / ${d}`;
+    }
+
+    update();
+    setInterval(update, 1000);
+  </script>
+
+</body>
+</html>
