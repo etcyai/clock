@@ -52,7 +52,7 @@
     z-index: 1;
   }
 
-  /* ===== 左側感應區（滑鼠移過去才會出現） ===== */
+  /* ===== 左側感應區 ===== */
   .dock-wrapper {
     position: fixed;
     left: 0;
@@ -81,7 +81,6 @@
     opacity: 0;
   }
 
-  /* ===== 合併長條玻璃工具列 ===== */
   .dock {
     position: absolute;
     left: 18px;
@@ -153,12 +152,12 @@
     background: rgba(255, 255, 255, 0.12);
   }
 
-  /* ===== 工具面板（碼表 / 計時器 / 番茄鐘） ===== */
+  /* ===== 工具面板 ===== */
   .panel {
     position: fixed;
     left: clamp(100px, 10vw, 118px);
     top: 50%;
-    width: clamp(230px, 26vw, 280px);
+    width: clamp(250px, 28vw, 300px);
     padding: 14px 22px 26px;
     border-radius: 28px;
     background: rgba(255, 255, 255, 0.09);
@@ -247,11 +246,11 @@
   .panel-display {
     color: #fff;
     font-family: 'Poppins', sans-serif;
-    font-size: clamp(34px, 4vw, 42px);
+    font-size: clamp(28px, 3.4vw, 34px);
     font-weight: 600;
     text-align: center;
     letter-spacing: 1px;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
 
   .panel-sub {
@@ -259,8 +258,8 @@
     opacity: 0.5;
     font-size: 12px;
     text-align: center;
-    margin-top: -12px;
-    margin-bottom: 16px;
+    margin-top: -8px;
+    margin-bottom: 14px;
     letter-spacing: 1px;
   }
 
@@ -302,30 +301,143 @@
     background: rgba(255, 255, 255, 1);
   }
 
-  .timer-adjust {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 18px;
+  /* ===== iPhone 風格滾輪選擇器 ===== */
+  .wheel-group {
+    position: relative;
+    margin: 4px 0 16px;
+    max-height: 140px;
+    opacity: 1;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.25s ease, margin 0.3s ease;
   }
 
-  .timer-adjust .adj-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: inset 0 1px 1px rgba(255,255,255,0.35);
+  .wheel-cols {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    height: 108px;
+    position: relative;
+  }
+
+  .wheel-col {
+    width: 52px;
+    height: 108px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .wheel-col:active {
+    cursor: grabbing;
+  }
+
+  .wheel-col.disabled {
+    pointer-events: none;
+    opacity: 0.45;
+  }
+
+  .wheel-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    will-change: transform;
+  }
+
+  .wheel-item {
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    opacity: 0.3;
+    will-change: opacity, transform;
   }
 
-  .timer-adjust .adj-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
+  .wheel-highlight {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wheel-unit-labels {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .wheel-unit-labels span {
+    width: 52px;
+    text-align: center;
+    color: #fff;
+    opacity: 0.4;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  /* 開始後收起設定區 */
+  .panel.running .wheel-group {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .panel.running .mode-tabs {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    pointer-events: none;
+  }
+
+  /* 番茄鐘：專注／休息切換分頁 */
+  .mode-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    max-height: 40px;
+    transition: max-height 0.3s ease, opacity 0.25s ease, margin 0.3s ease, padding 0.3s ease;
+  }
+
+  .mode-tab {
+    flex: 1;
+    text-align: center;
+    padding: 7px 0;
+    border-radius: 999px;
+    color: #fff;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .mode-tab.active {
+    background: rgba(255, 255, 255, 0.16);
+    opacity: 1;
   }
 </style>
 </head>
@@ -334,7 +446,7 @@
   <div class="time" id="timeEl">00:00</div>
   <div class="date-line" id="dateLine"></div>
 
-  <!-- 左側感應區：滑鼠移過去才顯示工具列 -->
+  <!-- 左側感應區 -->
   <div class="dock-wrapper">
     <div class="hint"></div>
     <div class="dock">
@@ -387,11 +499,18 @@
     <div class="panel-close" data-close="timer">✕</div>
     <div class="drag-handle"><div class="grip"><span></span><span></span><span></span></div></div>
     <div class="panel-title">計時器</div>
-    <div class="panel-display" id="tmDisplay">05:00</div>
-    <div class="timer-adjust" id="tmAdjust">
-      <div class="adj-btn" data-delta="-60">−1</div>
-      <div class="adj-btn" data-delta="60">+1</div>
+    <div class="panel-display" id="tmDisplay">00:05:00</div>
+
+    <div class="wheel-group" id="tmWheelGroup">
+      <div class="wheel-cols">
+        <div class="wheel-highlight"></div>
+        <div class="wheel-col" id="tmWheelH"></div>
+        <div class="wheel-col" id="tmWheelM"></div>
+        <div class="wheel-col" id="tmWheelS"></div>
+      </div>
+      <div class="wheel-unit-labels"><span>時</span><span>分</span><span>秒</span></div>
     </div>
+
     <div class="panel-buttons">
       <button class="pill-btn primary" id="tmStart">開始</button>
       <button class="pill-btn" id="tmReset">重置</button>
@@ -403,8 +522,24 @@
     <div class="panel-close" data-close="pomodoro">✕</div>
     <div class="drag-handle"><div class="grip"><span></span><span></span><span></span></div></div>
     <div class="panel-title">番茄鐘</div>
-    <div class="panel-display" id="pmDisplay">25:00</div>
+    <div class="panel-display" id="pmDisplay">00:25:00</div>
     <div class="panel-sub" id="pmMode">專注時間</div>
+
+    <div class="mode-tabs" id="pmTabs">
+      <div class="mode-tab active" data-mode="focus">專注設定</div>
+      <div class="mode-tab" data-mode="break">休息設定</div>
+    </div>
+
+    <div class="wheel-group" id="pmWheelGroup">
+      <div class="wheel-cols">
+        <div class="wheel-highlight"></div>
+        <div class="wheel-col" id="pmWheelH"></div>
+        <div class="wheel-col" id="pmWheelM"></div>
+        <div class="wheel-col" id="pmWheelS"></div>
+      </div>
+      <div class="wheel-unit-labels"><span>時</span><span>分</span><span>秒</span></div>
+    </div>
+
     <div class="panel-buttons">
       <button class="pill-btn primary" id="pmStart">開始</button>
       <button class="pill-btn" id="pmReset">重置</button>
@@ -547,49 +682,219 @@
       document.getElementById('swStart').textContent = '開始';
     });
 
+    /* ===== 共用格式化 (HH:MM:SS) ===== */
+    function formatHMS(totalSeconds) {
+      const s = Math.max(0, Math.round(totalSeconds));
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const r = s % 60;
+      return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${r.toString().padStart(2,'0')}`;
+    }
+
+    /* ===== iPhone 風格滾輪選擇器（transform 版本，避免原生捲動造成的卡頓） ===== */
+    function buildWheelColumn(container, max, initial, onSettle) {
+      const itemHeight = 36;
+      container.innerHTML = '';
+
+      const track = document.createElement('div');
+      track.className = 'wheel-track';
+      container.appendChild(track);
+
+      const items = [];
+      for (let i = 0; i <= max; i++) {
+        const item = document.createElement('div');
+        item.className = 'wheel-item';
+        item.textContent = i.toString().padStart(2, '0');
+        track.appendChild(item);
+        items.push(item);
+      }
+
+      const maxPos = max * itemHeight;
+      let position = initial * itemHeight;
+      let dragging = false;
+      let lastY = 0;
+      let lastT = 0;
+      let velocity = 0;
+      let animRAF = null;
+      let renderScheduled = false;
+      let wheelSettleTimer = null;
+
+      function clamp(p) {
+        return Math.min(maxPos, Math.max(0, p));
+      }
+
+      function render() {
+        renderScheduled = false;
+        track.style.transform = `translateY(${itemHeight - position}px)`;
+        const first = Math.max(0, Math.floor(position / itemHeight) - 4);
+        const last = Math.min(max, Math.ceil(position / itemHeight) + 4);
+        for (let i = first; i <= last; i++) {
+          const dist = Math.abs(position - i * itemHeight);
+          const item = items[i];
+          item.style.opacity = Math.max(0.25, 1 - dist / 60);
+          item.style.transform = `scale(${Math.max(0.8, 1 - dist / 240)})`;
+        }
+      }
+
+      function scheduleRender() {
+        if (renderScheduled) return;
+        renderScheduled = true;
+        requestAnimationFrame(render);
+      }
+
+      function currentIndex() {
+        return Math.min(max, Math.max(0, Math.round(position / itemHeight)));
+      }
+
+      function cancelAnim() {
+        if (animRAF) {
+          cancelAnimationFrame(animRAF);
+          animRAF = null;
+        }
+      }
+
+      function animateTo(target) {
+        cancelAnim();
+        const start = position;
+        const startTime = performance.now();
+        const duration = 220;
+        function step(now) {
+          const t = Math.min(1, (now - startTime) / duration);
+          const ease = 1 - Math.pow(1 - t, 3);
+          position = start + (target - start) * ease;
+          render();
+          if (t < 1) {
+            animRAF = requestAnimationFrame(step);
+          } else {
+            animRAF = null;
+          }
+        }
+        animRAF = requestAnimationFrame(step);
+      }
+
+      function settle() {
+        const idx = currentIndex();
+        animateTo(idx * itemHeight);
+        if (onSettle) onSettle(idx);
+      }
+
+      function startMomentum() {
+        cancelAnim();
+        let v = velocity;
+        let lastTime = performance.now();
+        function step(now) {
+          const dt = Math.min(32, now - lastTime);
+          lastTime = now;
+          v *= Math.pow(0.94, dt / 16);
+          const next = position - v * dt;
+          position = clamp(next);
+          render();
+          if (Math.abs(v) > 0.02 && position > 0 && position < maxPos) {
+            animRAF = requestAnimationFrame(step);
+          } else {
+            animRAF = null;
+            settle();
+          }
+        }
+        animRAF = requestAnimationFrame(step);
+      }
+
+      container.addEventListener('pointerdown', (e) => {
+        dragging = true;
+        cancelAnim();
+        lastY = e.clientY;
+        lastT = performance.now();
+        velocity = 0;
+        container.setPointerCapture(e.pointerId);
+      });
+
+      container.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        const now = performance.now();
+        const dy = e.clientY - lastY;
+        const dt = Math.max(1, now - lastT);
+        position = clamp(position - dy);
+        velocity = dy / dt;
+        lastY = e.clientY;
+        lastT = now;
+        scheduleRender();
+      });
+
+      function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        if (Math.abs(velocity) > 0.05) {
+          startMomentum();
+        } else {
+          settle();
+        }
+      }
+      container.addEventListener('pointerup', endDrag);
+      container.addEventListener('pointerleave', () => { if (dragging) endDrag(); });
+
+      container.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        cancelAnim();
+        position = clamp(position + e.deltaY);
+        scheduleRender();
+        if (wheelSettleTimer) clearTimeout(wheelSettleTimer);
+        wheelSettleTimer = setTimeout(settle, 120);
+      }, { passive: false });
+
+      render();
+
+      return {
+        setValue(v) {
+          cancelAnim();
+          position = clamp(v * itemHeight);
+          render();
+        },
+        getValue: currentIndex,
+        disable() { container.classList.add('disabled'); },
+        enable() { container.classList.remove('disabled'); }
+      };
+    }
+
     /* ===== 計時器 ===== */
-    let tmTotal = 5 * 60;
+    let tmDuration = { h: 0, m: 5, s: 0 };
+    let tmTotal = tmDuration.h * 3600 + tmDuration.m * 60 + tmDuration.s;
     let tmRemaining = tmTotal;
     let tmRunning = false;
     let tmInterval = null;
+    const tmPanel = document.getElementById('panel-timer');
 
-    function formatTimer(sec) {
-      const s = Math.max(0, Math.round(sec));
-      const m = Math.floor(s / 60);
-      const r = s % 60;
-      return `${m.toString().padStart(2,'0')}:${r.toString().padStart(2,'0')}`;
+    function tmRecalcTotal() {
+      if (tmRunning) return;
+      tmTotal = tmDuration.h * 3600 + tmDuration.m * 60 + tmDuration.s;
+      tmRemaining = tmTotal;
+      renderTimerDisplay();
     }
 
-    function renderTimer() {
-      document.getElementById('tmDisplay').textContent = formatTimer(tmRemaining);
+    function renderTimerDisplay() {
+      document.getElementById('tmDisplay').textContent = formatHMS(tmRemaining);
     }
-    renderTimer();
+    renderTimerDisplay();
 
-    document.getElementById('tmAdjust').querySelectorAll('.adj-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (tmRunning) return;
-        const delta = parseInt(btn.dataset.delta, 10);
-        tmTotal = Math.max(60, tmTotal + delta);
-        tmRemaining = tmTotal;
-        renderTimer();
-      });
-    });
+    const tmWheelH = buildWheelColumn(document.getElementById('tmWheelH'), 23, tmDuration.h, (v) => { tmDuration.h = v; tmRecalcTotal(); });
+    const tmWheelM = buildWheelColumn(document.getElementById('tmWheelM'), 59, tmDuration.m, (v) => { tmDuration.m = v; tmRecalcTotal(); });
+    const tmWheelS = buildWheelColumn(document.getElementById('tmWheelS'), 59, tmDuration.s, (v) => { tmDuration.s = v; tmRecalcTotal(); });
 
     document.getElementById('tmStart').addEventListener('click', (e) => {
       tmRunning = !tmRunning;
       if (tmRunning) {
         e.target.textContent = '暫停';
+        tmPanel.classList.add('running');
         tmInterval = setInterval(() => {
           tmRemaining -= 1;
           if (tmRemaining <= 0) {
             tmRemaining = 0;
-            renderTimer();
+            renderTimerDisplay();
             clearInterval(tmInterval);
             tmRunning = false;
             document.getElementById('tmStart').textContent = '開始';
             return;
           }
-          renderTimer();
+          renderTimerDisplay();
         }, 1000);
       } else {
         e.target.textContent = '開始';
@@ -600,36 +905,81 @@
     document.getElementById('tmReset').addEventListener('click', () => {
       tmRunning = false;
       clearInterval(tmInterval);
+      tmPanel.classList.remove('running');
+      tmTotal = tmDuration.h * 3600 + tmDuration.m * 60 + tmDuration.s;
       tmRemaining = tmTotal;
-      renderTimer();
+      renderTimerDisplay();
       document.getElementById('tmStart').textContent = '開始';
     });
 
     /* ===== 番茄鐘 ===== */
-    const FOCUS_TIME = 25 * 60;
-    const BREAK_TIME = 5 * 60;
-    let pmRemaining = FOCUS_TIME;
+    let pmFocusDuration = { h: 0, m: 25, s: 0 };
+    let pmBreakDuration = { h: 0, m: 5, s: 0 };
+    let pmEditingMode = 'focus';
     let pmIsBreak = false;
     let pmRunning = false;
     let pmInterval = null;
+    const pmPanel = document.getElementById('panel-pomodoro');
 
-    function renderPomodoro() {
-      document.getElementById('pmDisplay').textContent = formatTimer(pmRemaining);
+    function pmTotalSeconds(dur) {
+      return dur.h * 3600 + dur.m * 60 + dur.s;
+    }
+
+    let pmRemaining = pmTotalSeconds(pmFocusDuration);
+
+    function renderPomodoroDisplay() {
+      document.getElementById('pmDisplay').textContent = formatHMS(pmRemaining);
       document.getElementById('pmMode').textContent = pmIsBreak ? '休息時間' : '專注時間';
     }
-    renderPomodoro();
+    renderPomodoroDisplay();
+
+    const pmWheelH = buildWheelColumn(document.getElementById('pmWheelH'), 23, pmFocusDuration.h, (v) => {
+      const dur = pmEditingMode === 'focus' ? pmFocusDuration : pmBreakDuration;
+      dur.h = v;
+      pmRecalcIfIdle();
+    });
+    const pmWheelM = buildWheelColumn(document.getElementById('pmWheelM'), 59, pmFocusDuration.m, (v) => {
+      const dur = pmEditingMode === 'focus' ? pmFocusDuration : pmBreakDuration;
+      dur.m = v;
+      pmRecalcIfIdle();
+    });
+    const pmWheelS = buildWheelColumn(document.getElementById('pmWheelS'), 59, pmFocusDuration.s, (v) => {
+      const dur = pmEditingMode === 'focus' ? pmFocusDuration : pmBreakDuration;
+      dur.s = v;
+      pmRecalcIfIdle();
+    });
+
+    function pmRecalcIfIdle() {
+      if (pmRunning) return;
+      const activeDur = pmIsBreak ? pmBreakDuration : pmFocusDuration;
+      pmRemaining = pmTotalSeconds(activeDur);
+      renderPomodoroDisplay();
+    }
+
+    document.querySelectorAll('.mode-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (pmRunning) return;
+        pmEditingMode = tab.dataset.mode;
+        document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t === tab));
+        const dur = pmEditingMode === 'focus' ? pmFocusDuration : pmBreakDuration;
+        pmWheelH.setValue(dur.h);
+        pmWheelM.setValue(dur.m);
+        pmWheelS.setValue(dur.s);
+      });
+    });
 
     document.getElementById('pmStart').addEventListener('click', (e) => {
       pmRunning = !pmRunning;
       if (pmRunning) {
         e.target.textContent = '暫停';
+        pmPanel.classList.add('running');
         pmInterval = setInterval(() => {
           pmRemaining -= 1;
           if (pmRemaining <= 0) {
             pmIsBreak = !pmIsBreak;
-            pmRemaining = pmIsBreak ? BREAK_TIME : FOCUS_TIME;
+            pmRemaining = pmTotalSeconds(pmIsBreak ? pmBreakDuration : pmFocusDuration);
           }
-          renderPomodoro();
+          renderPomodoroDisplay();
         }, 1000);
       } else {
         e.target.textContent = '開始';
@@ -640,9 +990,10 @@
     document.getElementById('pmReset').addEventListener('click', () => {
       pmRunning = false;
       clearInterval(pmInterval);
+      pmPanel.classList.remove('running');
       pmIsBreak = false;
-      pmRemaining = FOCUS_TIME;
-      renderPomodoro();
+      pmRemaining = pmTotalSeconds(pmFocusDuration);
+      renderPomodoroDisplay();
       document.getElementById('pmStart').textContent = '開始';
     });
   </script>
