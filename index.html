@@ -439,12 +439,147 @@
     background: rgba(255, 255, 255, 0.16);
     opacity: 1;
   }
+
+  /* ===== 主題選單 ===== */
+  .theme-options {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+
+  .theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .theme-swatch {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 6px 16px rgba(0, 0, 0, 0.35);
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .theme-option:hover .theme-swatch {
+    transform: scale(1.05);
+  }
+
+  .theme-option.active .theme-swatch {
+    border-color: #fff;
+  }
+
+  .theme-option span {
+    color: #fff;
+    opacity: 0.7;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .theme-option.active span {
+    opacity: 1;
+  }
+
+  .theme-swatch-default {
+    background: #000;
+  }
+
+  .theme-swatch-sakura {
+    background: linear-gradient(145deg, #ffffff 0%, #ffe6f2 50%, #ffbede 100%);
+  }
+
+  /* ===== 櫻花花瓣層 ===== */
+  .petal-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+    display: none;
+  }
+
+  body[data-theme="sakura"] .petal-layer {
+    display: block;
+  }
+
+  .petal {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    border-radius: 0 100% 0 100%;
+    background: radial-gradient(circle at 30% 30%, #ffffff, #ffeaf3 55%, #ffc2e0 100%);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.7), 0 0 12px rgba(255, 194, 224, 0.5);
+    opacity: 0;
+    animation-name: petal-fall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes petal-fall {
+    0% {
+      transform: translate3d(0, -10vh, 0) rotate(0deg);
+      opacity: 0;
+    }
+    8% {
+      opacity: 0.9;
+    }
+    50% {
+      transform: translate3d(var(--drift-mid, 30px), 55vh, 0) rotate(180deg);
+    }
+    92% {
+      opacity: 0.85;
+    }
+    100% {
+      transform: translate3d(var(--drift-end, -20px), 110vh, 0) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* ===== 櫻花主題配色（白粉夢幻） ===== */
+  body[data-theme="sakura"] {
+    background: radial-gradient(circle at 25% 20%, #fffbfd 0%, #ffeef6 30%, #ffdcec 65%, #ffc9e2 100%);
+  }
+
+  body[data-theme="sakura"] .time {
+    color: #7a2f52;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.9),
+      0 2px 6px rgba(255, 255, 255, 0.9),
+      0 4px 20px rgba(255, 255, 255, 0.7);
+  }
+
+  body[data-theme="sakura"] .date-line {
+    color: #8a3d63;
+    opacity: 0.85;
+    text-shadow: 0 1px 4px rgba(255, 255, 255, 0.8);
+  }
+
+  body[data-theme="sakura"] .dock {
+    background: rgba(122, 47, 82, 0.45);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  body[data-theme="sakura"] .panel {
+    background: rgba(122, 47, 82, 0.45);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  body[data-theme="sakura"] .hint {
+    background: rgba(122, 47, 82, 0.4);
+  }
 </style>
 </head>
 <body>
 
   <div class="time" id="timeEl">00:00</div>
   <div class="date-line" id="dateLine"></div>
+
+  <!-- 櫻花花瓣層 -->
+  <div class="petal-layer" id="petalLayer"></div>
 
   <!-- 左側感應區 -->
   <div class="dock-wrapper">
@@ -478,6 +613,17 @@
           <path d="M12 6.8c0-2.2 -1.6-3.8 -3.2-4.3"></path>
         </svg>
         <span class="label">番茄鐘</span>
+      </div>
+      <div class="divider"></div>
+      <div class="segment" data-target="theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"></circle>
+          <circle cx="16" cy="12" r="1.1" fill="currentColor" stroke="none"></circle>
+          <circle cx="12" cy="16" r="1.1" fill="currentColor" stroke="none"></circle>
+          <circle cx="8" cy="12" r="1.1" fill="currentColor" stroke="none"></circle>
+        </svg>
+        <span class="label">主題</span>
       </div>
     </div>
   </div>
@@ -543,6 +689,23 @@
     <div class="panel-buttons">
       <button class="pill-btn primary" id="pmStart">開始</button>
       <button class="pill-btn" id="pmReset">重置</button>
+    </div>
+  </div>
+
+  <!-- 主題面板 -->
+  <div class="panel" id="panel-theme">
+    <div class="panel-close" data-close="theme">✕</div>
+    <div class="drag-handle"><div class="grip"><span></span><span></span><span></span></div></div>
+    <div class="panel-title">主題</div>
+    <div class="theme-options">
+      <div class="theme-option active" data-theme="default">
+        <div class="theme-swatch theme-swatch-default"></div>
+        <span>預設</span>
+      </div>
+      <div class="theme-option" data-theme="sakura">
+        <div class="theme-swatch theme-swatch-sakura"></div>
+        <span>櫻花</span>
+      </div>
     </div>
   </div>
 
@@ -996,6 +1159,72 @@
       renderPomodoroDisplay();
       document.getElementById('pmStart').textContent = '開始';
     });
+
+    /* ===== 主題切換（櫻花） ===== */
+    const themeOptions = document.querySelectorAll('.theme-option');
+    const petalLayer = document.getElementById('petalLayer');
+    let petalInterval = null;
+
+    function spawnPetal() {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      const size = 8 + Math.random() * 10;
+      const left = Math.random() * 100;
+      const duration = 7 + Math.random() * 6;
+      const delay = Math.random() * 0.5;
+      const driftMid = (Math.random() * 60 - 30) + 'px';
+      const driftEnd = (Math.random() * 80 - 40) + 'px';
+      petal.style.left = left + 'vw';
+      petal.style.width = size + 'px';
+      petal.style.height = size + 'px';
+      petal.style.animationDuration = duration + 's';
+      petal.style.animationDelay = delay + 's';
+      petal.style.setProperty('--drift-mid', driftMid);
+      petal.style.setProperty('--drift-end', driftEnd);
+      petalLayer.appendChild(petal);
+      setTimeout(() => petal.remove(), (duration + delay) * 1000 + 200);
+    }
+
+    function startPetals() {
+      if (petalInterval) return;
+      spawnPetal();
+      petalInterval = setInterval(spawnPetal, 400);
+    }
+
+    function stopPetals() {
+      if (petalInterval) {
+        clearInterval(petalInterval);
+        petalInterval = null;
+      }
+      petalLayer.innerHTML = '';
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'sakura') {
+        document.body.dataset.theme = 'sakura';
+        startPetals();
+      } else {
+        delete document.body.dataset.theme;
+        stopPetals();
+      }
+      themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.theme === theme));
+      try {
+        localStorage.setItem('clockTheme', theme);
+      } catch (e) {}
+    }
+
+    themeOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        applyTheme(opt.dataset.theme);
+        closeAllPanels();
+      });
+    });
+
+    let savedTheme = 'default';
+    try {
+      savedTheme = localStorage.getItem('clockTheme') || 'default';
+    } catch (e) {}
+    applyTheme(savedTheme);
   </script>
 
 </body>
