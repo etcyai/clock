@@ -492,6 +492,116 @@
     background: linear-gradient(145deg, #ffffff 0%, #ffe6f2 50%, #ffbede 100%);
   }
 
+  .theme-swatch-jungle {
+    background: linear-gradient(145deg, #3d6b3f 0%, #16240f 60%, #06090a 100%);
+  }
+
+  /* ===== 叢林花瓣層（藤蔓 / 螢火蟲 / 霧氣） ===== */
+  .jungle-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+    display: none;
+  }
+
+  body[data-theme="jungle"] .jungle-layer {
+    display: block;
+  }
+
+  .jungle-mist {
+    position: absolute;
+    inset: -15%;
+    background:
+      radial-gradient(circle at 25% 30%, rgba(180, 220, 160, 0.08), transparent 40%),
+      radial-gradient(circle at 75% 65%, rgba(140, 200, 130, 0.06), transparent 45%);
+    filter: blur(30px);
+    animation: jungle-mist-drift 34s ease-in-out infinite alternate;
+  }
+
+  @keyframes jungle-mist-drift {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(4%, 3%); }
+  }
+
+  .vine {
+    position: absolute;
+    top: -10px;
+    width: 150px;
+    height: 62vh;
+    opacity: 0.9;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
+  }
+
+  .vine-left {
+    left: -14px;
+  }
+
+  .vine-right {
+    right: -14px;
+    transform: scaleX(-1);
+  }
+
+  .firefly {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f2ffb8 0%, #baf27a 45%, rgba(186, 242, 122, 0) 75%);
+    box-shadow: 0 0 8px 2px rgba(210, 255, 140, 0.75);
+    opacity: 0;
+    animation-name: firefly-float;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes firefly-float {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0;
+    }
+    15% {
+      opacity: 0.9;
+    }
+    50% {
+      transform: translate3d(var(--fx-mid, 20px), var(--fy-mid, -30px), 0);
+      opacity: 0.45;
+    }
+    85% {
+      opacity: 0.9;
+    }
+    100% {
+      transform: translate3d(var(--fx-end, -15px), var(--fy-end, -60px), 0);
+      opacity: 0;
+    }
+  }
+
+  /* ===== 叢林主題配色（潮濕陰暗） ===== */
+  body[data-theme="jungle"] {
+    background: radial-gradient(circle at 30% 20%, #1b2b1a 0%, #10190f 55%, #060907 100%);
+  }
+
+  body[data-theme="jungle"] .time {
+    color: #d9f2c4;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 22px rgba(160, 255, 120, 0.15);
+  }
+
+  body[data-theme="jungle"] .date-line {
+    color: #9fc98a;
+    opacity: 0.75;
+  }
+
+  body[data-theme="jungle"] .dock,
+  body[data-theme="jungle"] .panel {
+    background: rgba(14, 26, 13, 0.55);
+    border-color: rgba(150, 200, 120, 0.22);
+  }
+
+  body[data-theme="jungle"] .hint {
+    background: rgba(150, 200, 120, 0.25);
+  }
+
   /* ===== 櫻花花瓣層 ===== */
   .petal-layer {
     position: fixed;
@@ -580,6 +690,31 @@
 
   <!-- 櫻花花瓣層 -->
   <div class="petal-layer" id="petalLayer"></div>
+
+  <!-- 叢林藤蔓/螢火蟲/霧氣層 -->
+  <div class="jungle-layer" id="jungleLayer">
+    <div class="jungle-mist"></div>
+    <svg class="vine vine-left" viewBox="0 0 160 700" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M80 0 C 30 70, 130 150, 55 250 C 5 330, 140 410, 65 510 C 20 590, 110 650, 80 700"
+        fill="none" stroke="#2f5233" stroke-width="9" stroke-linecap="round"/>
+      <ellipse cx="35" cy="90" rx="20" ry="11" fill="#3d6b3f" transform="rotate(-30 35 90)"/>
+      <ellipse cx="120" cy="180" rx="22" ry="12" fill="#345c37" transform="rotate(25 120 180)"/>
+      <ellipse cx="25" cy="300" rx="20" ry="11" fill="#3d6b3f" transform="rotate(-15 25 300)"/>
+      <ellipse cx="130" cy="400" rx="24" ry="13" fill="#2f5233" transform="rotate(20 130 400)"/>
+      <ellipse cx="35" cy="520" rx="20" ry="11" fill="#345c37" transform="rotate(-25 35 520)"/>
+      <ellipse cx="110" cy="610" rx="22" ry="12" fill="#3d6b3f" transform="rotate(15 110 610)"/>
+    </svg>
+    <svg class="vine vine-right" viewBox="0 0 160 700" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M80 0 C 30 70, 130 150, 55 250 C 5 330, 140 410, 65 510 C 20 590, 110 650, 80 700"
+        fill="none" stroke="#2f5233" stroke-width="9" stroke-linecap="round"/>
+      <ellipse cx="35" cy="90" rx="20" ry="11" fill="#3d6b3f" transform="rotate(-30 35 90)"/>
+      <ellipse cx="120" cy="180" rx="22" ry="12" fill="#345c37" transform="rotate(25 120 180)"/>
+      <ellipse cx="25" cy="300" rx="20" ry="11" fill="#3d6b3f" transform="rotate(-15 25 300)"/>
+      <ellipse cx="130" cy="400" rx="24" ry="13" fill="#2f5233" transform="rotate(20 130 400)"/>
+      <ellipse cx="35" cy="520" rx="20" ry="11" fill="#345c37" transform="rotate(-25 35 520)"/>
+      <ellipse cx="110" cy="610" rx="22" ry="12" fill="#3d6b3f" transform="rotate(15 110 610)"/>
+    </svg>
+  </div>
 
   <!-- 左側感應區 -->
   <div class="dock-wrapper">
@@ -705,6 +840,10 @@
       <div class="theme-option" data-theme="sakura">
         <div class="theme-swatch theme-swatch-sakura"></div>
         <span>櫻花</span>
+      </div>
+      <div class="theme-option" data-theme="jungle">
+        <div class="theme-swatch theme-swatch-jungle"></div>
+        <span>叢林</span>
       </div>
     </div>
   </div>
@@ -1199,13 +1338,59 @@
       petalLayer.innerHTML = '';
     }
 
+    const jungleLayer = document.getElementById('jungleLayer');
+    let fireflyInterval = null;
+
+    function spawnFirefly() {
+      const fly = document.createElement('div');
+      fly.className = 'firefly';
+      const left = 10 + Math.random() * 80;
+      const top = 20 + Math.random() * 70;
+      const duration = 5 + Math.random() * 5;
+      const delay = Math.random() * 1.5;
+      const fxMid = (Math.random() * 50 - 25) + 'px';
+      const fyMid = (Math.random() * -50 - 10) + 'px';
+      const fxEnd = (Math.random() * 60 - 30) + 'px';
+      const fyEnd = (Math.random() * -80 - 20) + 'px';
+      fly.style.left = left + 'vw';
+      fly.style.top = top + 'vh';
+      fly.style.animationDuration = duration + 's';
+      fly.style.animationDelay = delay + 's';
+      fly.style.setProperty('--fx-mid', fxMid);
+      fly.style.setProperty('--fy-mid', fyMid);
+      fly.style.setProperty('--fx-end', fxEnd);
+      fly.style.setProperty('--fy-end', fyEnd);
+      jungleLayer.appendChild(fly);
+      setTimeout(() => fly.remove(), (duration + delay) * 1000 + 200);
+    }
+
+    function startFireflies() {
+      if (fireflyInterval) return;
+      spawnFirefly();
+      fireflyInterval = setInterval(spawnFirefly, 500);
+    }
+
+    function stopFireflies() {
+      if (fireflyInterval) {
+        clearInterval(fireflyInterval);
+        fireflyInterval = null;
+      }
+      jungleLayer.querySelectorAll('.firefly').forEach(f => f.remove());
+    }
+
     function applyTheme(theme) {
       if (theme === 'sakura') {
         document.body.dataset.theme = 'sakura';
         startPetals();
+        stopFireflies();
+      } else if (theme === 'jungle') {
+        document.body.dataset.theme = 'jungle';
+        startFireflies();
+        stopPetals();
       } else {
         delete document.body.dataset.theme;
         stopPetals();
+        stopFireflies();
       }
       themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.theme === theme));
       try {
